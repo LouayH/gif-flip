@@ -11,10 +11,6 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
-
 $router->group([
     'prefix' => 'auth'
 ], function ($router) {
@@ -23,4 +19,8 @@ $router->group([
     $router->post('logout', 'AuthController@logout');
     $router->post('refresh', 'AuthController@refresh');
     $router->post('me', 'AuthController@me');
+});
+
+$router->get('/{route:.*}/', function ()  {
+    return view('app');
 });
