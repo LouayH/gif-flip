@@ -35,6 +35,28 @@ class AuthController extends Controller
             'password' => 'required|min:8|confirmed'
         ]);
 
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+        $data = "secret=" . env('RECAPTCHA_SECRET_KEY') .
+            "&response=" . $request->input('recaptcha_token');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responseData = curl_exec($ch);
+        if(curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+
+        $responseData = json_decode($responseData);
+
+        if(!$responseData->success) {
+            return response()->json(['recaptcha_token' => 'Recaptcha Failed, Please try again'], 422);
+        }
+
         try {
             $user = new User;
             $user->username = $request->input('username');

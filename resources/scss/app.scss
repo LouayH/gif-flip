@@ -16,3 +16,55 @@ a {
     color: black;
     text-decoration: none;
 }
+
+form.auth {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    box-shadow: 20px 20px 20px -20px hsla(0,0%,0%,.2);
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    border: solid 2px #41403E;
+    width: 100%;
+    max-width: 480px;
+    padding: 1rem 2rem;
+
+    h2 {
+        margin: 1rem 0;
+    }
+
+    input {
+        outline: 0;
+        box-sizing: border-box;
+        border-radius: 255px 15px 225px 15px/31px 225px 31px 0;
+        border: none;
+        border-bottom: dashed 2px #41403E;
+        margin: .5rem 0;
+        width: 100%;
+        padding: .5rem 0;
+        font-family: 'Comic Neue', cursive;
+        font-size: 1.25rem;
+    }
+
+    .error {
+        color: red;
+    }
+
+    p.error {
+        margin: 1.5rem auto 1.5rem 0;
+    }
+
+    button {
+        outline: 0;
+        border: 0;
+        margin: 1rem 0 1rem auto;
+        background: transparent;
+        font-family: 'Comic Neue', cursive;
+        font-weight: bold;
+        font-size: 1.25rem;
+        cursor: pointer;
+
+        &:disabled {
+            cursor: default;
+        }
+    }
+}
