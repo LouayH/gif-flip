@@ -7,4 +7,3 @@ export default new VueRouter({
     mode: 'history',
     base: '/'
 });
-
