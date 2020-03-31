@@ -65,7 +65,12 @@ export default {
                 .then(response => {
                     // redirect to login view if register completed successfully
                     if(response.ok) {
-                        this.$router.push('/login');
+                        this.$router.push({
+                            name: 'login',
+                            params: {
+                                registeredEmail: this.email
+                            }
+                        });
                     }
 
                     return response.json();
