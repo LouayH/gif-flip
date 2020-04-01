@@ -25,6 +25,7 @@ $router->group([
     'prefix' => 'api'
 ], function ($router) {
     $router->post('search', 'GifController@search');
+    $router->post('history', 'GifController@history');
 });
 
 $router->get('/{route:.*}/', function ()  {

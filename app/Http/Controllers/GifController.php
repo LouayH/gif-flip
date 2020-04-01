@@ -46,4 +46,19 @@ class GifController extends Controller
 
         return response()->json($responseData);
     }
+
+    /**
+     * Get Search History for Logged In User
+     *
+     * @param   Request $request
+     *
+     * @return  \Illuminate\Http\JsonResponse
+     */
+    public function history(Request $request)
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            return response()->json($user->history);
+        }
+    }
 }
