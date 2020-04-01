@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import Register from '../components/views/Register';
 import Login from '../components/views/Login';
+import Search from '../components/views/Search';
 
 Vue.use(VueRouter);
 
@@ -10,6 +11,7 @@ export default new VueRouter({
     mode: 'history',
     base: '/',
     routes: [
+        { path: '/', component: Search },
         { path: '/register', component: Register },
         { path: '/login', name: 'login', component: Login, props: true }
     ]
