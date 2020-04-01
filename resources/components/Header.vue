@@ -10,16 +10,34 @@
         <nav v-else>
             <router-link to="/history">History</router-link>
             <router-link to="/favorite">Favorite</router-link>
-            <router-link to="/" @click="logout">Logout</router-link>
+            <router-link to="/" @click.native="logout">Logout</router-link>
         </nav>
     </header>
 </template>
 
 <script>
+import { getAccessToken } from '../js/utils';
+
 export default {
     methods: {
         logout() {
-            console.log('logout');
+            const token = getAccessToken();
+
+            if(token) {
+                fetch('/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.message) {
+                        this.$store.commit('SET_USER', null);
+                        this.$router.push('/');
+                    }
+                });
+            }
         }
     }
 }
@@ -69,7 +87,7 @@ header {
         flex-direction: column;
 
         nav {
-            margin-top: 1rem;
+            margin: 1rem 0;
         }
     }
 }
