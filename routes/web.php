@@ -21,6 +21,12 @@ $router->group([
     $router->post('me', 'AuthController@me');
 });
 
+$router->group([
+    'prefix' => 'api'
+], function ($router) {
+    $router->post('search', 'GifController@search');
+});
+
 $router->get('/{route:.*}/', function ()  {
     return view('app');
 });
