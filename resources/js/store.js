@@ -26,9 +26,13 @@ export default new Vuex.Store({
                         'Authorization': `bearer ${token}`
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if(response.ok) {
+                        return response.json();
+                    }
+                })
                 .then(data => {
-                    if(data.id) {
+                    if(data && data.id) {
                         commit('SET_USER', data);
                     }
                 });
