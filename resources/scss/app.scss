@@ -9,6 +9,10 @@ html {
 body {
     margin: 0;
     font-family: 'Comic Neue', cursive;
+
+    &.no-overflow {
+        overflow: hidden;
+    }
 }
 
 a {

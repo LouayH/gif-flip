@@ -6,4 +6,5 @@ Homestead.yaml
 .phpunit.result.cache
 node_modules
 public/dist
+public/images
 public/mix-manifest.json

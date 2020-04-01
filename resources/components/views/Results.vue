@@ -3,7 +3,7 @@
         <masonry id="masonry" v-if="results.length"
             :cols="{default: 5, 1200: 4, 992: 3, 768: 2, 480: 1}"
             :gutter="{default: '1rem'}" >
-            <div class="item"
+            <div class="item" @click="openGif(result)"
                 v-for="result in results" :key="result.id">
                 <img :src="result.images.fixed_width_still.url"
                     :style="{ width: `${result.images.fixed_width_still.width}px`, height: `${result.images.fixed_width_still.height}px` }"
@@ -24,18 +24,24 @@
                 {{ $route.params.offset > 0 ? 'Next' : 'Load More' }}
             </button>
         </nav>
+
+        <div id="overlay" v-if="openedGif" @click.self="closeGif">
+            <Gif :openedGif="openedGif" />
+        </div>
     </section>
 </template>
 
 <script>
 import Vue from 'vue';
 import VueMasonry from 'vue-masonry-css';
+Vue.use(VueMasonry);
 
 import { getAccessToken } from '../../js/utils';
 
-Vue.use(VueMasonry);
+import Gif from './Gif';
 
 export default {
+    components: { Gif },
     props: {
         directSearch: {
             type: Boolean,
@@ -47,7 +53,8 @@ export default {
         loadingText: 'Please wait...',
         noResults: null,
         total_count: 0,
-        results: []
+        results: [],
+        openedGif: null
     }),
     computed: {
         last_offset() {
@@ -99,6 +106,15 @@ export default {
                     // 24 is images count per page
                 }
             });
+        },
+        openGif(gif) {
+            this.openedGif = gif;
+            window.scrollTo(0, 0);
+            document.querySelector('body').classList.add('no-overflow');
+        },
+        closeGif() {
+            this.openedGif = null;
+            document.querySelector('body').classList.remove('no-overflow');
         }
     },
     mounted() {
@@ -111,18 +127,34 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #results {
     display: flex;
     flex-direction: column;
     align-items: center;
 
+    #overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0, 0, 0, .75);
+    }
+
     #masonry {
-        img {
-            display: block;
-            border: solid 2px #41403E;
-            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-            margin-bottom: 1rem;
+        .item {
+            cursor: pointer;
+
+            img {
+                display: block;
+                border: solid 2px #41403E;
+                border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+                margin-bottom: 1rem;
+            }
         }
     }
 
