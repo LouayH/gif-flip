@@ -50,4 +50,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return [];
     }
+
+    /**
+     * Get history for the user.
+     */
+    public function history()
+    {
+        return $this->hasMany('App\History');
+    }
 }
