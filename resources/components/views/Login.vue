@@ -46,11 +46,13 @@ export default {
                 },
                 body: JSON.stringify(payload)
             })
-            .then(response => {
-                if(response.ok) { this.$router.push('/'); }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
+                if(data.access_token) {
+                    this.$store.dispatch('fetchUser');
+                    this.$router.push('/');
+                }
+
                 this.waiting = false;
                 this.message = data.message;
             });

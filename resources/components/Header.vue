@@ -3,12 +3,27 @@
         <h1>
             <router-link to="/">GIF Flip</router-link>
         </h1>
-        <nav>
+        <nav v-if="!$store.getters.user">
             <router-link to="/register">Register</router-link>
             <router-link to="/login">Login</router-link>
         </nav>
+        <nav v-else>
+            <router-link to="/history">History</router-link>
+            <router-link to="/favorite">Favorite</router-link>
+            <router-link to="/" @click="logout">Logout</router-link>
+        </nav>
     </header>
 </template>
+
+<script>
+export default {
+    methods: {
+        logout() {
+            console.log('logout');
+        }
+    }
+}
+</script>
 
 <style lang="scss" scoped>
 header {

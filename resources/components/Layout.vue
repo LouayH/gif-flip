@@ -15,7 +15,10 @@ import Header from './Header'
 import Footer from './Footer'
 
 export default {
-    components: { Header, Footer }
+    components: { Header, Footer },
+    mounted() {
+        this.$store.dispatch('fetchUser');
+    }
 }
 </script>
 

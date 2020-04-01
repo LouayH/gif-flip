@@ -138,6 +138,6 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $expires_in
-        ])->withCookie(new Cookie('access_token', $token, time() + $expires_in));
+        ])->withCookie(new Cookie('access_token', $token, time() + $expires_in, "", "", FALSE, FALSE));
     }
 }
