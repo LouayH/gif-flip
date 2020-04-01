@@ -15,7 +15,14 @@ export default {
     }),
     methods: {
         submit() {
-            console.log('search')
+            this.$router.push({
+                name: 'results',
+                params: {
+                    query: this.query_string,
+                    offset: 0,
+                    directSearch: true
+                }
+            })
         }
     }
 }
