@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\History;
 use App\Favorite;
+use App\ShortURL;
 
 class GifController extends Controller
 {
@@ -36,6 +37,18 @@ class GifController extends Controller
         curl_close($ch);
 
         $responseData = json_decode($responseData);
+
+        // save encoded string for every GIF id and return it
+        foreach($responseData->data as $index => $gif) {
+            $short_url = ShortURL::where('gif_id', '=', $gif->id)->first();
+            if(!$short_url) {
+                $short_url = new ShortURL;
+                $short_url->gif_id = $gif->id;
+                $short_url->save();
+            }
+
+            $responseData->data[$index]->short_url = $short_url->encode();
+        }
 
         // save to history if user is logged in and its direct search
         if(Auth::check() && $request->input('direct_search')) {
