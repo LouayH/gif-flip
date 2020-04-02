@@ -62,6 +62,26 @@ class GifController extends Controller
     }
 
     /**
+     * Decode Shorten URL and return GIF id
+     *
+     * @param   $url
+     *
+     * @return  Illuminate\Http\RedirectResponse
+     */
+    public function decodeURL($url) {
+        $base = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $limit = strlen($url);
+        $decoded = strpos($base, $url[0]);
+        for($i = 1; $i < $limit; $i++) {
+            $decoded = 62 * $decoded + strpos($base, $url[$i]);
+        }
+
+        $short_url = ShortURL::find($decoded);
+
+        return redirect('gif/' . $short_url->gif_id);
+    }
+
+    /**
      * Get Search History for Logged In User
      *
      * @param   Request $request

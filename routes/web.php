@@ -30,6 +30,8 @@ $router->group([
     $router->post('unfavorite', 'GifController@unfavorite');
 });
 
+$router->get('/g/{url}', 'GifController@decodeURL');
+
 $router->get('/{route:.*}/', function ()  {
     return view('app');
 });
