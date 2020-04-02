@@ -21,7 +21,11 @@ export default {
     },
     computed: {
         isFavorited() {
-            return this.$store.getters.user.favorites.find(favorite => favorite.gif_id === this.gif.id);
+            if(this.$store.getters.user) {
+                return this.$store.getters.user.favorites.find(favorite => favorite.gif_id === this.gif.id);
+            } else {
+                return false;
+            }
         }
     },
     methods: {
