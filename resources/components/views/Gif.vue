@@ -10,9 +10,7 @@
         </div>
         <video controls :src="gif.images.original_mp4.mp4"></video>
         <div id="actions">
-            <div id="favorite" class="action">
-                <span class="icon outline-heart"></span> Favorite this GIF
-            </div>
+            <Favorite :gif="gif" />
             <div id="share-link" class="action">
                 <span class="icon link"></span> Share GIF Link
             </div>
@@ -21,7 +19,10 @@
 </template>
 
 <script>
+import Favorite from '../Favorite';
+
 export default {
+    components: { Favorite },
     props: {
         openedGif: {
             type: Object,
@@ -68,6 +69,7 @@ export default {
         .action {
             display: flex;
             align-items: center;
+            cursor: pointer;
 
             .icon {
                 display: inline-block;
@@ -79,16 +81,6 @@ export default {
                 &.link {
                     mask: url('../../images/link.svg');
                     background: #ecf0f1;
-                }
-
-                &.outline-heart {
-                    mask: url('../../images/outline-heart.svg');
-                    background: #ecf0f1;
-                }
-
-                &.heart {
-                    mask: url('../../images/heart.svg');
-                    background: #e74c3c;
                 }
             }
         }
