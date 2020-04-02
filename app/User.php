@@ -56,7 +56,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function history()
     {
-        return $this->hasMany('App\History');
+        return $this->hasMany('App\History')->orderBy('created_at', 'DESC');
     }
 
     /**
