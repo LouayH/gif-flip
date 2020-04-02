@@ -26,6 +26,8 @@ $router->group([
 ], function ($router) {
     $router->post('search', 'GifController@search');
     $router->post('history', 'GifController@history');
+    $router->post('favorite', 'GifController@favorite');
+    $router->post('unfavorite', 'GifController@unfavorite');
 });
 
 $router->get('/{route:.*}/', function ()  {

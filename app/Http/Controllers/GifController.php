@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\History;
+use App\Favorite;
 
 class GifController extends Controller
 {
@@ -59,6 +60,63 @@ class GifController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             return response()->json($user->history);
+        }
+    }
+
+    /**
+     * Set Favorite GIF for Logged In User
+     *
+     * @param   Request $request
+     *
+     * @return  \Illuminate\Http\JsonResponse
+     */
+    public function favorite(Request $request)
+    {
+        if (Auth::check()) {
+            $favorite_exists = Favorite::where([
+                ['gif_id', '=', $request->input('gif_id')],
+                ['user_id', '=', Auth::id()]
+            ])->first();
+
+            if (!$favorite_exists) {
+                $favorite = new Favorite;
+                $favorite->user_id = Auth::id();
+                $favorite->gif_id = $request->input('gif_id');
+                $favorite->gif_title = $request->input('gif_title');
+                $favorite->thumb_url = $request->input('thumb_url');
+                $favorite->thumb_width = $request->input('thumb_width');
+                $favorite->thumb_height = $request->input('thumb_height');
+                $favorite->mp4_url = $request->input('mp4_url');
+                $favorite->save();
+
+                return response()->json($favorite);
+            } else {
+                return response()->json(['message' => 'Gif already favorited'], 400);
+            }
+        }
+    }
+
+    /**
+     * Remove Favorite GIF for Logged In User
+     *
+     * @param   Request $request
+     *
+     * @return  \Illuminate\Http\JsonResponse
+     */
+    public function unfavorite(Request $request)
+    {
+        if (Auth::check()) {
+            $favorite_exists = Favorite::where([
+                ['gif_id', '=', $request->input('gif_id')],
+                ['user_id', '=', Auth::id()]
+            ])->first();
+
+            if ($favorite_exists) {
+                $favorite_exists->delete();
+                return response()->json($favorite_exists);
+            } else {
+                return response()->json(['message' => 'Gif not favorited'], 400);
+            }
         }
     }
 }

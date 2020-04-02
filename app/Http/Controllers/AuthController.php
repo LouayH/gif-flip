@@ -98,7 +98,9 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(Auth::user());
+        $user = User::with('favorites')->find(Auth::id());
+
+        return response()->json($user);
     }
 
     /**
