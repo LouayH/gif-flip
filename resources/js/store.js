@@ -13,6 +13,13 @@ export default new Vuex.Store({
         SET_USER: (state, user) => {
             state.user = user;
         },
+        ADD_TO_FAVORITES: (state, gif) => {
+            state.user.favorites.push(gif);
+        },
+        REMOVE_FROM_FAVORITES: (state, gif) => {
+            const favoritedIndex = state.user.favorites.findIndex(favorite => favorite.gif_id === gif.gif_id);
+            state.user.favorites.splice(favoritedIndex, 1);
+        },
         SET_RESULTS: (state, results) => {
             state.results = results;
         }
