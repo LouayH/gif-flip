@@ -58,4 +58,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasMany('App\History');
     }
+
+    /**
+     * Get favorites for the user.
+     */
+    public function favorites()
+    {
+        return $this->hasMany('App\Favorite');
+    }
 }
