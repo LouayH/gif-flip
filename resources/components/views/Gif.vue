@@ -11,7 +11,9 @@
         <video controls :src="gif.images.original_mp4.mp4"></video>
         <div id="actions">
             <Favorite :gif="gif" />
-            <div id="share-link" class="action">
+            <div id="share-link" class="action" @click="copyURL">
+                <input type="text" id="short-url"
+                    :value="`${origin}/g/${gif.short_url}`" />
                 <span class="icon link"></span> Share GIF Link
             </div>
         </div>
@@ -35,11 +37,27 @@ export default {
     computed: {
         gifIndex() {
             return this.$store.getters.results.findIndex(result => result.id === this.gif.id);
+        },
+        origin() {
+            return document.location.origin;
         }
     },
     methods: {
         changeGif(offset) {
             this.gif = this.$store.getters.results[this.gifIndex + offset];
+        },
+        copyURL() {
+            let input = document.querySelector("#short-url");
+            input.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if(successful) {
+                    alert('Shorten URL copied to clipboard');
+                }
+            } catch (err) {
+                alert('Something goes wrong!');
+            }
         }
     },
     mounted() {
@@ -70,6 +88,10 @@ export default {
             display: flex;
             align-items: center;
             cursor: pointer;
+
+            input {
+                opacity: 0;
+            }
 
             .icon {
                 display: inline-block;
