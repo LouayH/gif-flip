@@ -26,6 +26,9 @@ class GifController extends Controller
             "&offset=" . $request->input('offset') .
             "&limit=24&rating=G&lang=en";
 
+        // conver whitespaces to %20
+        $url = str_replace (' ', '%20', $url);
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
