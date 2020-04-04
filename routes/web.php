@@ -25,6 +25,7 @@ $router->group([
     'prefix' => 'api'
 ], function ($router) {
     $router->post('search', 'GifController@search');
+    $router->post('searchById', 'GifController@searchById');
     $router->post('history', 'GifController@history');
     $router->post('favorite', 'GifController@favorite');
     $router->post('unfavorite', 'GifController@unfavorite');

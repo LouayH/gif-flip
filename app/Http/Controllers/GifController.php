@@ -65,6 +65,39 @@ class GifController extends Controller
     }
 
     /**
+     * Search GIPHY Public API by GIF id
+     *
+     * @param   Request $request
+     *
+     * @return  \Illuminate\Http\JsonResponse
+     */
+    public function searchById(Request $request)
+    {
+        $url = "https://api.giphy.com/v1/gifs/" . $request->input('gif_id') . "?api_key=" . env('GIPHY_API_KEY');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responseData = curl_exec($ch);
+        if(curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+
+        $responseData = json_decode($responseData);
+
+        // get short url for this gif
+        $short_url = ShortURL::where('gif_id', '=', $responseData->data->id)->first();
+        if($short_url) {
+            $responseData->data->short_url = $short_url->encode();
+        }
+
+
+        return response()->json($responseData);
+    }
+
+    /**
      * Decode Shorten URL and return GIF id
      *
      * @param   $url
