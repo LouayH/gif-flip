@@ -1,15 +1,6 @@
 <template>
     <section id="favorites">
-        <masonry id="masonry" v-if="favorites.length"
-            :cols="{default: 5, 1200: 4, 992: 3, 768: 2, 480: 1}"
-            :gutter="{default: '1rem'}" >
-            <div class="item"
-                v-for="favorite in favorites" :key="favorite.id">
-                <img :src="favorite.thumb_url"
-                    :style="{ width: `${favorite.thumb_width}px`, height: `${favorite.thumb_height}px` }"
-                    :alt="favorite.title" />
-            </div>
-        </masonry>
+        <Masonry v-if="favorites.length" :items="favorites" :parent="'favorite'" />
 
         <p v-else>
             No favorites found!
@@ -19,14 +10,26 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueMasonry from 'vue-masonry-css';
-Vue.use(VueMasonry);
+import Masonry from '../Masonry';
 
 export default {
+    components: { Masonry },
     computed: {
         favorites() {
-            return this.$store.getters.user.favorites;
+            return this.$store.getters.user.favorites.map(favorite => ({
+                id: favorite.gif_id,
+                title: favorite.gif_title,
+                images: {
+                    fixed_width_still: {
+                        url: favorite.thumb_url,
+                        width: favorite.thumb_width,
+                        height: favorite.thumb_height
+                    },
+                    original_mp4: {
+                        mp4: favorite.mp4_url
+                    }
+                }
+            }));
         }
     }
 }
@@ -37,17 +40,6 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    #masonry {
-        .item {
-            img {
-                display: block;
-                border: solid 2px #41403E;
-                border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-                margin-bottom: 1rem;
-            }
-        }
-    }
 
     #search-again {
         text-decoration: underline;
