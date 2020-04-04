@@ -1,15 +1,6 @@
 <template>
     <section id="results">
-        <masonry id="masonry" v-if="results.length"
-            :cols="{default: 5, 1200: 4, 992: 3, 768: 2, 480: 1}"
-            :gutter="{default: '1rem'}" >
-            <div class="item" @click="openGif(result)"
-                v-for="result in results" :key="result.id">
-                <img :src="result.images.fixed_width_still.url"
-                    :style="{ width: `${result.images.fixed_width_still.width}px`, height: `${result.images.fixed_width_still.height}px` }"
-                    :alt="result.images.title" />
-            </div>
-        </masonry>
+        <Masonry v-if="results.length" :items="results" :parent="'results'" />
 
         <p v-else>
             {{ loadingText }}
@@ -30,16 +21,13 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VueMasonry from 'vue-masonry-css';
-Vue.use(VueMasonry);
-
+import Masonry from '../Masonry';
 import OverlayGif from '../OverlayGif';
 
 import { getAccessToken } from '../../js/utils';
 
 export default {
-    components: { OverlayGif },
+    components: { Masonry, OverlayGif },
     props: {
         directSearch: {
             type: Boolean,
@@ -106,15 +94,6 @@ export default {
                     // 24 is images count per page
                 }
             });
-        },
-        openGif(gif) {
-            this.$router.push({
-                name: 'results/gif',
-                params: {
-                    gid: gif.id,
-                    openedGif: gif
-                }
-            });
         }
     },
     mounted() {
@@ -132,19 +111,6 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    #masonry {
-        .item {
-            cursor: pointer;
-
-            img {
-                display: block;
-                border: solid 2px #41403E;
-                border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
-                margin-bottom: 1rem;
-            }
-        }
-    }
 
     #search-again {
         text-decoration: underline;
