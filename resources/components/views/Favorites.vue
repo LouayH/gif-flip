@@ -6,14 +6,17 @@
             No favorites found!
             <router-link id="search-again" to="/">Go Fav Some GIFs.</router-link>
         </p>
+
+        <OverlayGif :parent="'favorite'" />
     </section>
 </template>
 
 <script>
 import Masonry from '../Masonry';
+import OverlayGif from '../OverlayGif';
 
 export default {
-    components: { Masonry },
+    components: { Masonry, OverlayGif },
     computed: {
         favorites() {
             return this.$store.getters.user.favorites.map(favorite => ({

@@ -37,7 +37,16 @@ export default new VueRouter({
             ]
         },
         { path: '/history', component: History },
-        { path: '/favorite', component: Favorites },
+        { path: '/favorite', name: 'favorite', component: Favorites,
+            children: [
+                {
+                    path: 'gif/:gid',
+                    name: 'favorite/gif',
+                    component: Gif,
+                    props: true
+                }
+            ]
+        },
         { path: '*', redirect: '/' }
     ]
 });
