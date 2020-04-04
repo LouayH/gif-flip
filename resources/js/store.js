@@ -7,7 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         user: null,
-        results: []
+        slideshow_items: []
     },
     mutations: {
         SET_USER: (state, user) => {
@@ -20,8 +20,8 @@ export default new Vuex.Store({
             const favoritedIndex = state.user.favorites.findIndex(favorite => favorite.gif_id === gif.gif_id);
             state.user.favorites.splice(favoritedIndex, 1);
         },
-        SET_RESULTS: (state, results) => {
-            state.results = results;
+        SET_SLIDESHOW_ITEMS: (state, items) => {
+            state.slideshow_items = items;
         }
     },
     actions: {
@@ -52,6 +52,6 @@ export default new Vuex.Store({
     },
     getters: {
         user: state => state.user,
-        results: state => state.results
+        slideshow_items: state => state.slideshow_items
     }
 });

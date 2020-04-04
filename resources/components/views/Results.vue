@@ -78,7 +78,7 @@ export default {
                 this.total_count = results.pagination.total_count;
                 if(this.total_count) {
                     this.results = results.data;
-                    this.$store.commit('SET_RESULTS', this.results);
+                    this.$store.commit('SET_SLIDESHOW_ITEMS', this.results);
                 } else  {
                     this.noResults = true;
                     this.loadingText = 'No results found! ';

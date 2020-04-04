@@ -4,7 +4,7 @@
             <div id="prev" class="arrow" v-if="gifIndex > 0" @click="changeGif(-1)">
                 <span class="icon left-arrow"></span> Previous
             </div>
-            <div id="next" class="arrow" v-if="gifIndex > -1 && gifIndex < $store.getters.results.length - 1" @click="changeGif(1)">
+            <div id="next" class="arrow" v-if="gifIndex > -1 && gifIndex < $store.getters.slideshow_items.length - 1" @click="changeGif(1)">
                 Next <span class="icon right-arrow"></span>
             </div>
         </div>
@@ -38,7 +38,7 @@ export default {
     }),
     computed: {
         gifIndex() {
-            return this.$store.getters.results.findIndex(result => result.id === this.gif.id);
+            return this.$store.getters.slideshow_items.findIndex(item => item.id === this.gif.id);
         },
         origin() {
             return document.location.origin;
@@ -70,7 +70,7 @@ export default {
             });
         },
         changeGif(offset) {
-            const gif = this.$store.getters.results[this.gifIndex + offset];
+            const gif = this.$store.getters.slideshow_items[this.gifIndex + offset];
 
             this.$router.push({
                 name: 'results/gif',
