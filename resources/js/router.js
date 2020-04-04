@@ -18,10 +18,19 @@ export default new VueRouter({
         { path: '/', component: Search },
         { path: '/register', component: Register },
         { path: '/login', name: 'login', component: Login, props: true },
-        { path: '/results/:query/:offset', name: 'results', component: Results, props: true },
+        { path: '/results/:query/:offset', name: 'results', component: Results, props: true,
+            children: [
+                {
+                    path: 'gif/:gid',
+                    name: 'gif',
+                    component: Gif,
+                    props: true
+                }
+            ]
+        },
         { path: '/history', component: History },
         { path: '/favorite', component: Favorites },
-        { path: '/gif/:id', name: 'gif', component: Gif },
+        { path: '/gif/:gid', name: 'gif', component: Gif },
         { path: '*', redirect: '/' }
     ]
 });

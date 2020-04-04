@@ -25,8 +25,8 @@
             </button>
         </nav>
 
-        <div id="overlay" v-if="openedGif" @click.self="closeGif">
-            <Gif :openedGif="openedGif" />
+        <div id="overlay" v-if="isGifOpened" @click.self="closeGif">
+            <router-view />
         </div>
     </section>
 </template>
@@ -38,10 +38,7 @@ Vue.use(VueMasonry);
 
 import { getAccessToken } from '../../js/utils';
 
-import Gif from './Gif';
-
 export default {
-    components: { Gif },
     props: {
         directSearch: {
             type: Boolean,
@@ -53,19 +50,23 @@ export default {
         loadingText: 'Please wait...',
         noResults: null,
         total_count: 0,
-        results: [],
-        openedGif: null
+        results: []
     }),
     computed: {
         last_offset() {
             // 24 is images count per page
             return this.total_count - 24;
+        },
+        isGifOpened() {
+            return this.$route.name === 'gif';
         }
     },
     watch: {
         $route(to, from) {
-            this.results = [];
-            this.fetchResults();
+            if(from.name !== 'gif' && to.name === 'results') {
+                this.results = [];
+                this.fetchResults();
+            }
         }
     },
     methods: {
@@ -109,13 +110,18 @@ export default {
             });
         },
         openGif(gif) {
-            this.openedGif = gif;
-            window.scrollTo(0, 0);
-            document.querySelector('body').classList.add('no-overflow');
+            this.$router.push({
+                name: 'gif',
+                params: {
+                    gid: gif.id,
+                    openedGif: gif
+                }
+            });
         },
         closeGif() {
-            this.openedGif = null;
-            document.querySelector('body').classList.remove('no-overflow');
+            this.$router.push({
+                name: 'results'
+            });
         }
     },
     mounted() {

@@ -28,7 +28,7 @@ export default {
     props: {
         openedGif: {
             type: Object,
-            required: true
+            required: false
         }
     },
     data: () => ({
@@ -64,6 +64,12 @@ export default {
         if(this.openedGif) {
             this.gif = this.openedGif;
         }
+
+        window.scrollTo(0, 0);
+        document.querySelector('body').classList.add('no-overflow');
+    },
+    destroyed() {
+        document.querySelector('body').classList.remove('no-overflow');
     }
 }
 </script>
