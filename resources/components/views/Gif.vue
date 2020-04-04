@@ -73,7 +73,7 @@ export default {
             const gif = this.$store.getters.results[this.gifIndex + offset];
 
             this.$router.push({
-                name: 'gif',
+                name: 'results/gif',
                 params: {
                     gid: gif.id,
                     openedGif: gif

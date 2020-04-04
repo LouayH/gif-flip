@@ -25,9 +25,7 @@
             </button>
         </nav>
 
-        <div id="overlay" v-if="isGifOpened" @click.self="closeGif">
-            <router-view />
-        </div>
+        <OverlayGif :parent="'results'" />
     </section>
 </template>
 
@@ -36,9 +34,12 @@ import Vue from 'vue';
 import VueMasonry from 'vue-masonry-css';
 Vue.use(VueMasonry);
 
+import OverlayGif from '../OverlayGif';
+
 import { getAccessToken } from '../../js/utils';
 
 export default {
+    components: { OverlayGif },
     props: {
         directSearch: {
             type: Boolean,
@@ -56,14 +57,11 @@ export default {
         last_offset() {
             // 24 is images count per page
             return this.total_count - 24;
-        },
-        isGifOpened() {
-            return this.$route.name === 'gif';
         }
     },
     watch: {
         $route(to, from) {
-            if(from.name !== 'gif' && to.name === 'results') {
+            if(from.name !== 'results/gif' && to.name === 'results') {
                 this.results = [];
                 this.fetchResults();
             }
@@ -111,16 +109,11 @@ export default {
         },
         openGif(gif) {
             this.$router.push({
-                name: 'gif',
+                name: 'results/gif',
                 params: {
                     gid: gif.id,
                     openedGif: gif
                 }
-            });
-        },
-        closeGif() {
-            this.$router.push({
-                name: 'results'
             });
         }
     },
@@ -139,18 +132,6 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    #overlay {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(0, 0, 0, .75);
-    }
 
     #masonry {
         .item {

@@ -22,7 +22,7 @@ export default new VueRouter({
             children: [
                 {
                     path: 'gif/:gid',
-                    name: 'gif',
+                    name: 'results/gif',
                     component: Gif,
                     props: true
                 }
