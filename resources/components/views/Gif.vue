@@ -23,6 +23,8 @@
 <script>
 import Favorite from '../Favorite';
 
+import { getAccessToken } from '../../js/utils';
+
 export default {
     components: { Favorite },
     props: {
@@ -48,6 +50,25 @@ export default {
         }
     },
     methods: {
+        fetchGif() {
+            const token = getAccessToken();
+
+            const payload = {
+                gif_id: this.$route.params.gid
+            };
+
+            fetch('/api/searchById', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(results => {
+                this.gif = results.data;
+            });
+        },
         changeGif(offset) {
             const gif = this.$store.getters.results[this.gifIndex + offset];
 
@@ -76,6 +97,8 @@ export default {
     mounted() {
         if(this.openedGif) {
             this.gif = this.openedGif;
+        } else {
+            this.fetchGif();
         }
 
         window.scrollTo(0, 0);
