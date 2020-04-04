@@ -4,7 +4,7 @@
             <div id="prev" class="arrow" v-if="gifIndex > 0" @click="changeGif(-1)">
                 <span class="icon left-arrow"></span> Previous
             </div>
-            <div id="next" class="arrow" v-if="gifIndex < 23" @click="changeGif(1)">
+            <div id="next" class="arrow" v-if="gifIndex > 0 && gifIndex < 23" @click="changeGif(1)">
                 Next <span class="icon right-arrow"></span>
             </div>
         </div>
@@ -42,9 +42,22 @@ export default {
             return document.location.origin;
         }
     },
+    watch: {
+        $route(to, from) {
+            this.gif = to.params.openedGif;
+        }
+    },
     methods: {
         changeGif(offset) {
-            this.gif = this.$store.getters.results[this.gifIndex + offset];
+            const gif = this.$store.getters.results[this.gifIndex + offset];
+
+            this.$router.push({
+                name: 'gif',
+                params: {
+                    gid: gif.id,
+                    openedGif: gif
+                }
+            });
         },
         copyURL() {
             let input = document.querySelector("#short-url");
