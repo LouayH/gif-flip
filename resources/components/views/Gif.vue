@@ -4,7 +4,7 @@
             <div id="prev" class="arrow" v-if="gifIndex > 0" @click="changeGif(-1)">
                 <span class="icon left-arrow"></span> Previous
             </div>
-            <div id="next" class="arrow" v-if="gifIndex > 0 && gifIndex < 23" @click="changeGif(1)">
+            <div id="next" class="arrow" v-if="gifIndex > -1 && gifIndex < $store.getters.results.length - 1" @click="changeGif(1)">
                 Next <span class="icon right-arrow"></span>
             </div>
         </div>
