@@ -15,7 +15,15 @@ export default new VueRouter({
     mode: 'history',
     base: '/',
     routes: [
-        { path: '/', component: Search },
+        { path: '/', name: 'search', component: Search,
+            children: [
+                {
+                    path: 'gif/:gid',
+                    name: 'search/gif',
+                    component: Gif
+                }
+            ]
+        },
         { path: '/register', component: Register },
         { path: '/login', name: 'login', component: Login, props: true },
         { path: '/results/:query/:offset', name: 'results', component: Results, props: true,
@@ -30,7 +38,6 @@ export default new VueRouter({
         },
         { path: '/history', component: History },
         { path: '/favorite', component: Favorites },
-        { path: '/gif/:gid', name: 'gif', component: Gif },
         { path: '*', redirect: '/' }
     ]
 });
