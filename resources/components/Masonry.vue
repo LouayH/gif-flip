@@ -33,7 +33,8 @@ export default {
                 name: this.parent + '/gif',
                 params: {
                     gid: gif.id,
-                    openedGif: gif
+                    openedGif: gif,
+                    parent: this.parent
                 }
             });
         }

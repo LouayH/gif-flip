@@ -31,6 +31,10 @@ export default {
         openedGif: {
             type: Object,
             required: false
+        },
+        parent: {
+            type: String,
+            required: true
         }
     },
     data: () => ({
@@ -73,10 +77,11 @@ export default {
             const gif = this.$store.getters.slideshow_items[this.gifIndex + offset];
 
             this.$router.push({
-                name: 'results/gif',
+                name: this.parent + '/gif',
                 params: {
                     gid: gif.id,
-                    openedGif: gif
+                    openedGif: gif,
+                    parent: this.parent
                 }
             });
         },

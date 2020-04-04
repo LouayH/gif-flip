@@ -43,6 +43,7 @@ export default {
             },
             set(value) {
                 this.favorites = value;
+                this.$store.commit('SET_SLIDESHOW_ITEMS', this._favorites);
             }
         }
     },
