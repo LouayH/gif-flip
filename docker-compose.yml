@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - mysql_db:/var/lib/mysql
+    restart: always
+    environment:
+       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+       - MYSQL_DATABASE=${DB_DATABASE}
+       - MYSQL_USER=${DB_USERNAME}
+       - MYSQL_PASSWORD=${DB_PASSWORD}
+  web:
+    image: registry.gitlab.com/louayh/gif-flip/web:latest
+    volumes:
+      - mysql_db:/var/lib/mysql
+      - html:/var/www/html
+    env_file:
+      - .env
+    ports:
+      - 80:80
+    depends_on:
+      - db
+  node:
+    image: node:12.16.2
+    volumes:
+      - html:/var/www/html
+    env_file:
+      - .env
+    working_dir: /var/www/html
+    command: bash -c "npm install && npm run prod"
+    depends_on:
+      - web
+volumes:
+  mysql_db:
+  html:
