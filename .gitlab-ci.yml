@@ -1,0 +1,32 @@
+image: docker:stable
+services:
+  - docker:dind
+stages:
+  - deploy
+deploy:
+  stage: deploy
+  only:
+    - master
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $SSH_SERVER_ADDRESS >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+
+    - docker login registry.gitlab.com -u access-token -p $ACCESS_TOKEN
+    - docker build . -t $CONTAINER_REGISTRY/web -f Dockerfile --no-cache
+    - docker push $CONTAINER_REGISTRY/web
+  script:
+    - |
+      ssh $SSH_SERVER_USERNAME@$SSH_SERVER_ADDRESS /bin/bash -s << EOT
+      mkdir gif-flip
+      cd gif-flip
+      docker-compose down
+      docker image rm $CONTAINER_REGISTRY/web
+      wget $DOCKER_COMPOSE_URL -O docker-compose.yml --header "PRIVATE-TOKEN:$ACCESS_TOKEN"
+      docker-compose up -d
+      EOT
+  when: manual
