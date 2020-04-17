@@ -1,0 +1,51 @@
+name: GITHUB CI
+
+# Trigger when project starred
+on:
+  watch:
+    types: [started]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deploy"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    # Trigger only if repository owner starred project
+    if: github.actor == github.event.repository.owner.login
+    
+    env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install ssh-agent if not exists
+      run: 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - name: Start ssh-agent in the background
+      run: eval "$(ssh-agent -s)"
+    - name: Setup ssh credentials
+      run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan ${{ secrets.SSH_SERVER_ADDRESS }} >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+    - name: Login to docker hub
+      run: docker login docker.pkg.github.com -u access-token -p ${{ secrets.GITHUB_TOKEN }}
+    - name: Build docker image
+      run: docker build . -t ${{ secrets.CONTAINER_REGISTRY }}/web -f Dockerfile --no-cache
+    - name: Push docker image
+      run: docker push ${{ secrets.CONTAINER_REGISTRY }}/web
+    - name: Launch docker-compose on server
+      run: |
+        ssh ${{ secrets.SSH_SERVER_USERNAME }}@${{ secrets.SSH_SERVER_ADDRESS }} /bin/bash -s << EOT
+        mkdir gif-flip
+        cd gif-flip
+        docker-compose down
+        docker image rm ${{ secrets.CONTAINER_REGISTRY }}/web
+        wget ${{ secrets.DOCKER_COMPOSE_URL }} -O docker-compose.yml
+        docker-compose up -d
+        EOT
